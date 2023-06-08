@@ -4,7 +4,13 @@ class Person(
     val name : String = "",
     val age : Int = 0
 ) {
-    var email = ""
+    var email : String = ""
+    var nameLength : Int = 0
+
+    init{
+        println("Inside Init Block")
+        nameLength = name.length
+    }
 
     constructor(
         _email : String,
@@ -28,5 +34,6 @@ fun main() {
     println("Person name is ${person1.name} and age is ${person1.age}")
 
     val person2 = Person(_email="TEST@TEST.com",_name="TEST",_age = 20)
-    println("Person name is ${person2.name} and age is ${person2.age} and email is ${person2.email}")
+    println("Person name is ${person2.name} and age is ${person2.age} and email is ${person2.email}" +
+            " and nameLength is ${person2.nameLength}")
 }
