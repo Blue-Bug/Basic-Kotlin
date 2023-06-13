@@ -7,6 +7,8 @@ interface Repository {
 }
 
 interface CourseRepository {
+    val isCoursePersisted : Boolean
+
     fun getById(id : Int) : Course
     fun save(course : Course) : Int {
         println("course save : $course")
@@ -15,8 +17,15 @@ interface CourseRepository {
 }
 
 class SqlCourseRepository : CourseRepository, Repository {
+    override var isCoursePersisted: Boolean = false
+
     override fun getById(id: Int): Course {
         return Course(id,"Test Course Name", "Test")
+    }
+
+    override fun save(course: Course): Int {
+        isCoursePersisted = true
+        return super.save(course)
     }
 
     override fun getAll(): Any {
@@ -25,12 +34,15 @@ class SqlCourseRepository : CourseRepository, Repository {
 }
 
 class NoSqlCourseRepository : CourseRepository {
+    override var isCoursePersisted: Boolean = false
+
     override fun getById(id: Int): Course {
         return Course(id,"Test Course Name", "Test")
     }
 
     override fun save(course: Course): Int {
         println("course save in NoSqlCourseRepository : $course")
+        isCoursePersisted = true
         return course.id
     }
 }
@@ -41,6 +53,7 @@ fun main(){
     println("Course is $course")
 
     val courseId1 = sqlCourseRepository.save(Course(5,"Test Course Name", "Test"))
+    println("Course persisted value is ${sqlCourseRepository.isCoursePersisted}")
     println("Saved Course Id is $courseId1")
 
     val noSqlCourseRepository = NoSqlCourseRepository()
